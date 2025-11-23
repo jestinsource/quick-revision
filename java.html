@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Java OOP Exam Practice Platform</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent1: #1abc9c;
+            --accent2: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .exam-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .module-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        select, button {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        button {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .exam-info {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .timer {
+            font-weight: bold;
+            color: var(--accent2);
+        }
+        
+        .question-counter {
+            color: var(--primary);
+        }
+        
+        .exam-content {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        
+        .question {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .question:last-child {
+            border-bottom: none;
+        }
+        
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .options {
+            margin-left: 20px;
+        }
+        
+        .option {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+            cursor: pointer;
+        }
+        
+        .option:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .option.selected {
+            background-color: #e1f0fa;
+            border-left: 4px solid var(--secondary);
+        }
+        
+        .option.correct {
+            background-color: #e8f6ef;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .option.incorrect {
+            background-color: #fdeaea;
+            border-left: 4px solid #e74c3c;
+        }
+        
+        input[type="radio"] {
+            margin-right: 10px;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
+        
+        .easy {
+            background-color: #e8f6ef;
+            color: #27ae60;
+        }
+        
+        .hard {
+            background-color: #fdeaea;
+            color: #e74c3c;
+        }
+        
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .results-container {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .score-display {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 20px 0;
+            color: var(--primary);
+        }
+        
+        .score-breakdown {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+        
+        .module-score {
+            text-align: center;
+        }
+        
+        .module-score-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--secondary);
+        }
+        
+        .review-options {
+            margin: 20px 0;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--accent1);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .question-status {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 15px 0;
+        }
+        
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+        }
+        
+        .status-dot.answered {
+            background-color: var(--secondary);
+        }
+        
+        .status-dot.current {
+            border: 2px solid var(--accent2);
+        }
+        
+        .explanation {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            border-left: 4px solid var(--accent1);
+        }
+        
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        @media (max-width: 768px) {
+            .exam-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .score-breakdown {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Java OOP Exam Practice Platform</h1>
+        <p>Practice questions from JUSTCODE - Object Oriented Programming</p>
+    </header>
+    
+    <div class="container">
+        <div class="exam-controls">
+            <div class="module-selector">
+                <label for="module-select">Select Module:</label>
+                <select id="module-select">
+                    <option value="1">Module 1: Java Basics & Classes</option>
+                    <option value="2">Module 2: Inheritance & Polymorphism</option>
+                    <option value="3">Module 3: Design Patterns</option>
+                    <option value="4">Module 4: GUI & Database</option>
+                    <option value="all">All Modules (Full Exam)</option>
+                </select>
+                <button id="start-exam">Start Exam</button>
+            </div>
+            
+            <div class="exam-info">
+                <div class="timer">Time: <span id="time">60:00</span></div>
+                <div class="question-counter">Question: <span id="current-question">1</span>/<span id="total-questions">40</span></div>
+            </div>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress" id="exam-progress"></div>
+        </div>
+        
+        <div class="question-status" id="question-status"></div>
+        
+        <div id="exam-content" class="exam-content hidden">
+            <div id="questions-container"></div>
+            
+            <div class="navigation">
+                <button id="prev-question">Previous</button>
+                <button id="next-question">Next</button>
+                <button id="submit-exam">Submit Exam</button>
+            </div>
+        </div>
+        
+        <div id="results-container" class="results-container hidden">
+            <h2>Exam Results</h2>
+            <div class="score-display">Your Score: <span id="final-score">0</span>/<span id="max-score">40</span></div>
+            
+            <div class="score-breakdown">
+                <div class="module-score">
+                    <h3>Module 1</h3>
+                    <div class="module-score-value"><span id="module1-score">0</span>/10</div>
+                </div>
+                <div class="module-score">
+                    <h3>Module 2</h3>
+                    <div class="module-score-value"><span id="module2-score">0</span>/10</div>
+                </div>
+                <div class="module-score">
+                    <h3>Module 3</h3>
+                    <div class="module-score-value"><span id="module3-score">0</span>/10</div>
+                </div>
+                <div class="module-score">
+                    <h3>Module 4</h3>
+                    <div class="module-score-value"><span id="module4-score">0</span>/10</div>
+                </div>
+            </div>
+            
+            <div class="review-options">
+                <button id="review-answers">Review Answers</button>
+                <button id="retake-exam">Retake Exam</button>
+                <button id="new-exam">Take Different Exam</button>
+            </div>
+            
+            <div id="answers-review" class="hidden">
+                <!-- Answers will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Java OOP Exam Questions Database
+        const examQuestions = {
+            module1: [
+                {
+                    id: 1,
+                    text: "You compile MyApp.java on Windows into MyApp.class, then copy that same MyApp.class file to both a Linux machine and a macOS system. Without recompiling, you run: java MyApp on each machine, and it executes successfully. What is the name of the compiled file format that makes this possible?",
+                    options: [
+                        "Java bytecode",
+                        "Java source code",
+                        "Java machine code",
+                        "Java executable"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "When you compile MyApp.java using javac MyApp.java, the Java compiler translates the source code into platform-independent bytecode, which is stored in the file MyApp.class. This bytecode can be executed on any system (Windows, Linux, macOS, etc.) that has a Java Virtual Machine (JVM)."
+                },
+                {
+                    id: 2,
+                    text: "What will be the value of a after the execution of the following code segment in Java? int a = -1; a = a >> 4;",
+                    options: [
+                        "0",
+                        "-1",
+                        "15",
+                        "-16"
+                    ],
+                    correct: 1,
+                    difficulty: "easy",
+                    explanation: "a = -1 in binary (32-bit two's complement) is: 11111111 11111111 11111111 11111111. The >> operator is an arithmetic right shift — it shifts bits to the right while keeping the sign bit. So when you shift right by 4 bits, the result is still 11111111 11111111 11111111 11111111, which is -1."
+                },
+                {
+                    id: 3,
+                    text: "What exact statement must replace // **INSERT STATEMENT A HERE** in the Car constructor so that when you run TestSuper, you see: Vehicle created, Type: Car, Parent Type: Generic Vehicle?",
+                    options: [
+                        "super();",
+                        "this();",
+                        "super.type = \"Generic Vehicle\";",
+                        "Vehicle();"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "The statement 'super();' calls the parent class constructor, which prints 'Vehicle created'. Without this call, the parent constructor wouldn't execute, and you wouldn't see that output."
+                },
+                {
+                    id: 4,
+                    text: "Which of the following best describes inheritance in Java?",
+                    options: [
+                        "A class can inherit from multiple parent classes",
+                        "A class can inherit from one parent class only",
+                        "Inheritance is not supported in Java",
+                        "Only interfaces can be inherited"
+                    ],
+                    correct: 1,
+                    difficulty: "easy",
+                    explanation: "Java supports single inheritance for classes (a class can extend only one parent class) but multiple inheritance for interfaces (a class can implement multiple interfaces)."
+                },
+                {
+                    id: 5,
+                    text: "What is the main difference between interfaces and abstract classes in Java?",
+                    options: [
+                        "Abstract classes can have constructors, interfaces cannot",
+                        "Interfaces can have instance variables, abstract classes cannot",
+                        "Abstract classes support multiple inheritance, interfaces do not",
+                        "Interfaces can have method implementations, abstract classes cannot"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "Abstract classes can have constructors and can contain both abstract and concrete methods with implementations. Interfaces (before Java 8) could only declare method signatures, but now can have default and static methods. However, interfaces still cannot have constructors."
+                },
+                {
+                    id: 6,
+                    text: "In the ExceptionDemo class, at which line might a FileNotFoundException be thrown?",
+                    options: [
+                        "Line 7",
+                        "Line 12",
+                        "Line 16",
+                        "Line 18"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "Line 7: FileInputStream fis = new FileInputStream(path); may throw FileNotFoundException if the file does not exist or cannot be opened. This is a checked exception."
+                },
+                {
+                    id: 7,
+                    text: "What is a key difference between AWT and Swing in Java?",
+                    options: [
+                        "AWT uses lightweight components, Swing uses heavyweight",
+                        "Swing components are platform-dependent",
+                        "AWT components are heavyweight, Swing components are lightweight",
+                        "Swing has fewer components than AWT"
+                    ],
+                    correct: 2,
+                    difficulty: "easy",
+                    explanation: "AWT uses heavyweight components that depend on native OS components, while Swing uses lightweight components that are fully written in Java and provide consistent appearance across platforms."
+                },
+                {
+                    id: 8,
+                    text: "Why is PreparedStatement preferred over Statement in JDBC?",
+                    options: [
+                        "It's faster for repeated queries and prevents SQL injection",
+                        "It requires less code to write",
+                        "It doesn't need a database connection",
+                        "It automatically closes connections"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "PreparedStatement is precompiled, making it faster for repeated queries. It also uses parameter binding which prevents SQL injection attacks by separating SQL code from data."
+                },
+                {
+                    id: 9,
+                    text: "What does the 'this' keyword refer to in Java?",
+                    options: [
+                        "The parent class object",
+                        "The current class object",
+                        "The superclass constructor",
+                        "A static method"
+                    ],
+                    correct: 1,
+                    difficulty: "easy",
+                    explanation: "The 'this' keyword is a reference variable that refers to the current object of the class. It helps distinguish between instance variables and local variables/parameters when they have the same name."
+                },
+                {
+                    id: 10,
+                    text: "Which SOLID principle states that a class should have only one reason to change?",
+                    options: [
+                        "Single Responsibility Principle",
+                        "Open/Closed Principle",
+                        "Liskov Substitution Principle",
+                        "Interface Segregation Principle"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "The Single Responsibility Principle (SRP) states that a class should have only one reason to change, meaning it should have only one responsibility or job."
+                }
+            ],
+            module2: [
+                {
+                    id: 1,
+                    text: "What is method overloading in Java?",
+                    options: [
+                        "Creating multiple methods with the same name but different parameters",
+                        "Creating multiple methods with different names but same parameters",
+                        "Changing a method's implementation in a subclass",
+                        "Making a method static"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "Method overloading is creating multiple methods with the same name but different parameters (different type, number, or order of parameters) in the same class."
+                },
+                {
+                    id: 2,
+                    text: "What is the purpose of a static variable in Java?",
+                    options: [
+                        "It belongs to the class rather than any object",
+                        "It can be accessed only within its method",
+                        "It changes value for each object",
+                        "It cannot be modified"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "A static variable belongs to the class rather than any specific object. All instances of the class share the same static variable, and it can be accessed without creating an object of the class."
+                },
+                {
+                    id: 3,
+                    text: "What is runtime polymorphism in Java?",
+                    options: [
+                        "Method overloading at compile time",
+                        "Method overriding resolved at runtime",
+                        "Using the final keyword",
+                        "Creating abstract classes"
+                    ],
+                    correct: 1,
+                    difficulty: "easy",
+                    explanation: "Runtime polymorphism (or dynamic method dispatch) is when a call to an overridden method is resolved at runtime rather than compile time. This is achieved through method overriding and inheritance."
+                },
+                {
+                    id: 4,
+                    text: "What will be the output of the Counter class after creating three objects?",
+                    options: [
+                        "Total number of objects created: 1",
+                        "Total number of objects created: 2",
+                        "Total number of objects created: 3",
+                        "Total number of objects created: 0"
+                    ],
+                    correct: 2,
+                    difficulty: "easy",
+                    explanation: "The static variable 'count' is shared by all objects of the Counter class. Each time a new object is created, the constructor increments 'count'. After creating three objects, count will be 3."
+                },
+                {
+                    id: 5,
+                    text: "In the Animal class hierarchy, what is printed when Animal a1 = new Dog(); a1.makeSound(); is executed?",
+                    options: [
+                        "Some generic animal sound",
+                        "Bark",
+                        "Meow",
+                        "Compilation error"
+                    ],
+                    correct: 1,
+                    difficulty: "easy",
+                    explanation: "Even though a1 is declared as Animal, it refers to a Dog object. At runtime, Java uses the actual object type to determine which overridden method to call, so Dog's makeSound() is executed, printing 'Bark'."
+                },
+                {
+                    id: 6,
+                    text: "What is the @Override annotation used for?",
+                    options: [
+                        "To indicate a method is being overloaded",
+                        "To indicate a method is being overridden",
+                        "To make a method final",
+                        "To create a static method"
+                    ],
+                    correct: 1,
+                    difficulty: "easy",
+                    explanation: "The @Override annotation indicates that a method is intended to override a method in a superclass. It helps catch errors at compile time if the method doesn't actually override anything."
+                },
+                {
+                    id: 7,
+                    text: "What is the difference between method overloading and method overriding?",
+                    options: [
+                        "Overloading occurs in the same class, overriding in parent-child classes",
+                        "Overriding occurs in the same class, overloading in parent-child classes",
+                        "Both occur in the same class",
+                        "Both occur in parent-child classes"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "Method overloading occurs within the same class when multiple methods have the same name but different parameters. Method overriding occurs in a subclass that provides a specific implementation of a method already defined in its parent class."
+                },
+                {
+                    id: 8,
+                    text: "What is the purpose of the 'super' keyword?",
+                    options: [
+                        "To refer to the current class object",
+                        "To refer to the parent class",
+                        "To create a static reference",
+                        "To call a private method"
+                    ],
+                    correct: 1,
+                    difficulty: "easy",
+                    explanation: "The 'super' keyword is used to refer to the immediate parent class object. It can be used to call parent class constructors, methods, or access parent class fields."
+                },
+                {
+                    id: 9,
+                    text: "What is the output of the Calculator class when add(10, 20) is called?",
+                    options: [
+                        "30",
+                        "20",
+                        "10",
+                        "Compilation error"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "The add(int a, int b) method returns the sum of two integers. When called with add(10, 20), it returns 30."
+                },
+                {
+                    id: 10,
+                    text: "In inheritance, what is the relationship between Dog and Animal?",
+                    options: [
+                        "Dog is a subclass of Animal",
+                        "Animal is a subclass of Dog",
+                        "Dog and Animal are unrelated",
+                        "Dog implements Animal"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "In the given example, Dog extends Animal, making Dog a subclass (child class) and Animal the superclass (parent class). This represents an 'is-a' relationship."
+                }
+            ],
+            module3: [
+                {
+                    id: 1,
+                    text: "What is the Adapter pattern used for?",
+                    options: [
+                        "To convert one interface into another that clients expect",
+                        "To create a single instance of a class",
+                        "To separate abstraction from implementation",
+                        "To define a family of algorithms"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "The Adapter pattern converts the interface of a class into another interface that clients expect. It lets classes work together that couldn't otherwise because of incompatible interfaces."
+                },
+                {
+                    id: 2,
+                    text: "What is the main purpose of the Singleton pattern?",
+                    options: [
+                        "To ensure a class has only one instance",
+                        "To create multiple instances of a class",
+                        "To hide the implementation details",
+                        "To provide a simplified interface"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "The Singleton pattern ensures that a class has only one instance and provides a global point of access to that instance."
+                },
+                {
+                    id: 3,
+                    text: "How does the Singleton pattern ensure only one instance?",
+                    options: [
+                        "By making the constructor private",
+                        "By making all methods static",
+                        "By using a public constructor",
+                        "By creating multiple instances"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "The Singleton pattern uses a private constructor to prevent direct instantiation and provides a static method that returns the single instance, creating it if it doesn't exist."
+                },
+                {
+                    id: 4,
+                    text: "In the AnalyticsAdapter example, what does the adapter do?",
+                    options: [
+                        "Converts Logger interface to AnalyticsService interface",
+                        "Creates a new AnalyticsService",
+                        "Extends the Logger class",
+                        "Implements both interfaces directly"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "The AnalyticsAdapter implements the Logger interface and internally uses an AnalyticsService object. It adapts the log() method to call sendEvent() on the AnalyticsService."
+                },
+                {
+                    id: 5,
+                    text: "What is lazy initialization in the Singleton pattern?",
+                    options: [
+                        "Creating the instance only when it's first needed",
+                        "Creating the instance at class loading time",
+                        "Creating multiple instances initially",
+                        "Never creating an instance"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "Lazy initialization means the Singleton instance is created only when it's first requested, not when the class is loaded. This can save resources if the instance is never used."
+                },
+                {
+                    id: 6,
+                    text: "Why is the Singleton instance variable declared as static?",
+                    options: [
+                        "So it can be accessed without an instance of the class",
+                        "To make it thread-safe",
+                        "To allow multiple instances",
+                        "To prevent inheritance"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "The instance variable is static so it belongs to the class rather than any object, allowing the getInstance() method to access it without needing an instance of the class."
+                },
+                {
+                    id: 7,
+                    text: "What problem does the Adapter pattern solve?",
+                    options: [
+                        "Interface incompatibility",
+                        "Too many class instances",
+                        "Complex object creation",
+                        "Tight coupling"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "The Adapter pattern solves the problem of incompatible interfaces by providing a wrapper that converts one interface to another."
+                },
+                {
+                    id: 8,
+                    text: "In the Logger Singleton, why is double-checked locking used?",
+                    options: [
+                        "To ensure thread safety with better performance",
+                        "To create multiple instances",
+                        "To make the class final",
+                        "To prevent method overriding"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "Double-checked locking is used to ensure thread safety while avoiding the performance cost of synchronizing every time getInstance() is called. The synchronization happens only when the instance is null."
+                },
+                {
+                    id: 9,
+                    text: "What is the role of the Adapter class in the pattern?",
+                    options: [
+                        "It implements the target interface and wraps the adaptee",
+                        "It extends the adaptee class",
+                        "It creates new interfaces",
+                        "It replaces the target interface"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "The Adapter class implements the target interface (the one the client expects) and contains a reference to the adaptee (the class with the incompatible interface). It translates requests from the target interface to the adaptee."
+                },
+                {
+                    id: 10,
+                    text: "What is a common use case for the Singleton pattern?",
+                    options: [
+                        "Database connection pools",
+                        "Creating multiple UI components",
+                        "Adapting different interfaces",
+                        "Implementing algorithms"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "Singleton is commonly used for resources that should have only one instance, such as database connection pools, configuration managers, or logging services."
+                }
+            ],
+            module4: [
+                {
+                    id: 1,
+                    text: "What is the purpose of ActionListener in Java Swing?",
+                    options: [
+                        "To handle button clicks and other actions",
+                        "To draw graphics on components",
+                        "To manage window layout",
+                        "To create database connections"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "ActionListener is an interface in Java Swing used to handle action events, such as button clicks, menu selections, or pressing Enter in a text field."
+                },
+                {
+                    id: 2,
+                    text: "What is JDBC used for in Java?",
+                    options: [
+                        "To connect Java applications to databases",
+                        "To create graphical user interfaces",
+                        "To handle exceptions",
+                        "To implement design patterns"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "JDBC (Java Database Connectivity) is an API that enables Java programs to execute SQL statements and interact with relational databases."
+                },
+                {
+                    id: 3,
+                    text: "What does MVC stand for in software design?",
+                    options: [
+                        "Model-View-Controller",
+                        "Main-View-Component",
+                        "Model-Value-Controller",
+                        "Main-Value-Component"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "MVC stands for Model-View-Controller, a design pattern that separates an application into three main components: Model (data and business logic), View (UI), and Controller (handles input)."
+                },
+                {
+                    id: 4,
+                    text: "What is the benefit of using PreparedStatement over Statement?",
+                    options: [
+                        "Prevents SQL injection and improves performance",
+                        "Makes code shorter",
+                        "Eliminates the need for a database connection",
+                        "Automatically handles transactions"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "PreparedStatement prevents SQL injection by using parameter binding and improves performance for repeated queries because the SQL is precompiled."
+                },
+                {
+                    id: 5,
+                    text: "In the GreetingApp, what happens when the 'Clear' button is clicked?",
+                    options: [
+                        "The text field and label are cleared",
+                        "The name is saved to the database",
+                        "A greeting message is displayed",
+                        "The application closes"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "When the 'Clear' button is clicked, the actionPerformed method sets both the text field and message label to empty strings, clearing their content."
+                },
+                {
+                    id: 6,
+                    text: "What is Dependency Inversion in the context of unit testing?",
+                    options: [
+                        "Making high-level modules depend on abstractions, not concretions",
+                        "Creating more dependencies between classes",
+                        "Making all methods static",
+                        "Eliminating all dependencies"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "Dependency Inversion Principle (DIP) states that high-level modules should not depend on low-level modules. Both should depend on abstractions. This allows using mock implementations during testing."
+                },
+                {
+                    id: 7,
+                    text: "What is the role of the Model in MVC?",
+                    options: [
+                        "Manages data and business logic",
+                        "Handles user input",
+                        "Displays the user interface",
+                        "Controls the application flow"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "In MVC, the Model represents the data and business logic of the application. It notifies observers (typically the View) when data changes."
+                },
+                {
+                    id: 8,
+                    text: "What is the purpose of SwingUtilities.invokeLater()?",
+                    options: [
+                        "To ensure Swing components are created on the Event Dispatch Thread",
+                        "To create multiple threads for Swing components",
+                        "To improve database performance",
+                        "To handle exceptions in Swing"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "SwingUtilities.invokeLater() is used to ensure that Swing components are created and updated on the Event Dispatch Thread (EDT), which is required for thread safety in Swing applications."
+                },
+                {
+                    id: 9,
+                    text: "What is a common way to apply Dependency Inversion for database access?",
+                    options: [
+                        "Use interfaces for data access and provide implementations",
+                        "Make all database methods static",
+                        "Put all database code in the View",
+                        "Eliminate database access in unit tests"
+                    ],
+                    correct: 0,
+                    difficulty: "hard",
+                    explanation: "By defining a DAO (Data Access Object) interface and providing different implementations (one for real database access, one for testing), you can apply Dependency Inversion and make code testable."
+                },
+                {
+                    id: 10,
+                    text: "What is the main advantage of the MVC pattern?",
+                    options: [
+                        "Separation of concerns and easier maintenance",
+                        "Faster execution speed",
+                        "Smaller code size",
+                        "Automatic database connection management"
+                    ],
+                    correct: 0,
+                    difficulty: "easy",
+                    explanation: "The main advantage of MVC is separation of concerns - the Model, View, and Controller have distinct responsibilities, making the code easier to maintain, test, and modify."
+                }
+            ]
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const moduleSelect = document.getElementById('module-select');
+            const startExamBtn = document.getElementById('start-exam');
+            const examContent = document.getElementById('exam-content');
+            const resultsContainer = document.getElementById('results-container');
+            const questionsContainer = document.getElementById('questions-container');
+            const prevQuestionBtn = document.getElementById('prev-question');
+            const nextQuestionBtn = document.getElementById('next-question');
+            const submitExamBtn = document.getElementById('submit-exam');
+            const reviewAnswersBtn = document.getElementById('review-answers');
+            const retakeExamBtn = document.getElementById('retake-exam');
+            const newExamBtn = document.getElementById('new-exam');
+            const timeDisplay = document.getElementById('time');
+            const currentQuestionDisplay = document.getElementById('current-question');
+            const totalQuestionsDisplay = document.getElementById('total-questions');
+            const examProgress = document.getElementById('exam-progress');
+            const questionStatus = document.getElementById('question-status');
+            const finalScoreDisplay = document.getElementById('final-score');
+            const maxScoreDisplay = document.getElementById('max-score');
+            const moduleScoreDisplays = {
+                1: document.getElementById('module1-score'),
+                2: document.getElementById('module2-score'),
+                3: document.getElementById('module3-score'),
+                4: document.getElementById('module4-score')
+            };
+            const answersReview = document.getElementById('answers-review');
+            
+            let currentExam = [];
+            let currentQuestionIndex = 0;
+            let userAnswers = {};
+            let timer;
+            let timeRemaining = 60 * 60; // 60 minutes in seconds
+            let examInProgress = false;
+            
+            // Initialize event listeners
+            startExamBtn.addEventListener('click', startExam);
+            prevQuestionBtn.addEventListener('click', showPreviousQuestion);
+            nextQuestionBtn.addEventListener('click', showNextQuestion);
+            submitExamBtn.addEventListener('click', submitExam);
+            reviewAnswersBtn.addEventListener('click', reviewAnswers);
+            retakeExamBtn.addEventListener('click', retakeExam);
+            newExamBtn.addEventListener('click', newExam);
+            
+            function startExam() {
+                const selectedModule = moduleSelect.value;
+                
+                // Generate exam questions based on selection
+                if (selectedModule === 'all') {
+                    // Combine questions from all modules
+                    currentExam = [
+                        ...shuffleArray(examQuestions.module1).slice(0, 10), // 10 questions from each module
+                        ...shuffleArray(examQuestions.module2).slice(0, 10),
+                        ...shuffleArray(examQuestions.module3).slice(0, 10),
+                        ...shuffleArray(examQuestions.module4).slice(0, 10)
+                    ];
+                } else {
+                    // Use questions from selected module only
+                    currentExam = shuffleArray(examQuestions[`module${selectedModule}`]);
+                }
+                
+                // Initialize user answers
+                userAnswers = {};
+                
+                // Reset exam state
+                currentQuestionIndex = 0;
+                timeRemaining = 60 * 60; // Reset to 60 minutes
+                examInProgress = true;
+                
+                // Update UI
+                examContent.classList.remove('hidden');
+                resultsContainer.classList.add('hidden');
+                startExamBtn.disabled = true;
+                moduleSelect.disabled = true;
+                
+                // Display questions
+                displayQuestions();
+                
+                // Start timer
+                startTimer();
+                
+                // Update question counter and progress
+                updateQuestionCounter();
+                updateProgressBar();
+                updateQuestionStatusDots();
+            }
+            
+            function displayQuestions() {
+                questionsContainer.innerHTML = '';
+                
+                currentExam.forEach((question, index) => {
+                    const questionElement = document.createElement('div');
+                    questionElement.className = 'question';
+                    if (index !== currentQuestionIndex) {
+                        questionElement.classList.add('hidden');
+                    }
+                    
+                    const difficultyClass = question.difficulty === 'hard' ? 'hard' : 'easy';
+                    
+                    questionElement.innerHTML = `
+                        <div class="question-text">
+                            ${index + 1}. ${question.text}
+                            <span class="difficulty ${difficultyClass}">${question.difficulty}</span>
+                        </div>
+                        <div class="options">
+                            ${question.options.map((option, optIndex) => `
+                                <div class="option ${userAnswers[index] === optIndex ? 'selected' : ''}" data-index="${optIndex}">
+                                    <input type="radio" name="question-${index}" id="q${index}-opt${optIndex}" 
+                                           ${userAnswers[index] === optIndex ? 'checked' : ''}>
+                                    <label for="q${index}-opt${optIndex}">${option}</label>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                    
+                    questionsContainer.appendChild(questionElement);
+                    
+                    // Add event listeners to options
+                    const options = questionElement.querySelectorAll('.option');
+                    options.forEach(option => {
+                        option.addEventListener('click', function() {
+                            const optionIndex = parseInt(this.getAttribute('data-index'));
+                            selectAnswer(index, optionIndex);
+                        });
+                    });
+                });
+            }
+            
+            function selectAnswer(questionIndex, optionIndex) {
+                userAnswers[questionIndex] = optionIndex;
+                
+                // Update UI
+                const questionElement = questionsContainer.children[questionIndex];
+                const options = questionElement.querySelectorAll('.option');
+                
+                options.forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                options[optionIndex].classList.add('selected');
+                options[optionIndex].querySelector('input').checked = true;
+                
+                // Update question status dots
+                updateQuestionStatusDots();
+            }
+            
+            function showPreviousQuestion() {
+                if (currentQuestionIndex > 0) {
+                    questionsContainer.children[currentQuestionIndex].classList.add('hidden');
+                    currentQuestionIndex--;
+                    questionsContainer.children[currentQuestionIndex].classList.remove('hidden');
+                    updateQuestionCounter();
+                    updateNavigationButtons();
+                }
+            }
+            
+            function showNextQuestion() {
+                if (currentQuestionIndex < currentExam.length - 1) {
+                    questionsContainer.children[currentQuestionIndex].classList.add('hidden');
+                    currentQuestionIndex++;
+                    questionsContainer.children[currentQuestionIndex].classList.remove('hidden');
+                    updateQuestionCounter();
+                    updateNavigationButtons();
+                }
+            }
+            
+            function updateQuestionCounter() {
+                currentQuestionDisplay.textContent = currentQuestionIndex + 1;
+                totalQuestionsDisplay.textContent = currentExam.length;
+            }
+            
+            function updateNavigationButtons() {
+                prevQuestionBtn.disabled = currentQuestionIndex === 0;
+                nextQuestionBtn.disabled = currentQuestionIndex === currentExam.length - 1;
+            }
+            
+            function updateProgressBar() {
+                const progress = ((currentQuestionIndex + 1) / currentExam.length) * 100;
+                examProgress.style.width = `${progress}%`;
+            }
+            
+            function updateQuestionStatusDots() {
+                questionStatus.innerHTML = '';
+                
+                for (let i = 0; i < currentExam.length; i++) {
+                    const dot = document.createElement('div');
+                    dot.className = 'status-dot';
+                    
+                    if (userAnswers[i] !== undefined) {
+                        dot.classList.add('answered');
+                    }
+                    
+                    if (i === currentQuestionIndex) {
+                        dot.classList.add('current');
+                    }
+                    
+                    dot.addEventListener('click', () => {
+                        questionsContainer.children[currentQuestionIndex].classList.add('hidden');
+                        currentQuestionIndex = i;
+                        questionsContainer.children[currentQuestionIndex].classList.remove('hidden');
+                        updateQuestionCounter();
+                        updateNavigationButtons();
+                        updateProgressBar();
+                        updateQuestionStatusDots();
+                    });
+                    
+                    questionStatus.appendChild(dot);
+                }
+            }
+            
+            function startTimer() {
+                clearInterval(timer);
+                
+                timer = setInterval(() => {
+                    timeRemaining--;
+                    
+                    if (timeRemaining <= 0) {
+                        clearInterval(timer);
+                        submitExam();
+                        return;
+                    }
+                    
+                    const minutes = Math.floor(timeRemaining / 60);
+                    const seconds = timeRemaining % 60;
+                    timeDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+            
+            function submitExam() {
+                clearInterval(timer);
+                examInProgress = false;
+                
+                // Calculate scores
+                const scores = calculateScores();
+                
+                // Display results
+                displayResults(scores);
+                
+                // Update UI
+                examContent.classList.add('hidden');
+                resultsContainer.classList.remove('hidden');
+                startExamBtn.disabled = false;
+                moduleSelect.disabled = false;
+            }
+            
+            function calculateScores() {
+                let totalScore = 0;
+                const moduleScores = {1: 0, 2: 0, 3: 0, 4: 0};
+                const moduleMaxScores = {1: 0, 2: 0, 3: 0, 4: 0};
+                
+                currentExam.forEach((question, index) => {
+                    // Determine which module this question belongs to
+                    let module = 1; // Default
+                    if (examQuestions.module1.includes(question)) module = 1;
+                    else if (examQuestions.module2.includes(question)) module = 2;
+                    else if (examQuestions.module3.includes(question)) module = 3;
+                    else if (examQuestions.module4.includes(question)) module = 4;
+                    
+                    moduleMaxScores[module]++;
+                    
+                    if (userAnswers[index] === question.correct) {
+                        totalScore++;
+                        moduleScores[module]++;
+                    }
+                });
+                
+                return {
+                    totalScore,
+                    moduleScores,
+                    moduleMaxScores
+                };
+            }
+            
+            function displayResults(scores) {
+                finalScoreDisplay.textContent = scores.totalScore;
+                maxScoreDisplay.textContent = currentExam.length;
+                
+                // Update module scores
+                for (let i = 1; i <= 4; i++) {
+                    if (moduleScoreDisplays[i]) {
+                        moduleScoreDisplays[i].textContent = scores.moduleScores[i] || 0;
+                    }
+                }
+            }
+            
+            function reviewAnswers() {
+                answersReview.innerHTML = '<h3>Answer Review</h3>';
+                
+                currentExam.forEach((question, index) => {
+                    const userAnswer = userAnswers[index];
+                    const isCorrect = userAnswer === question.correct;
+                    
+                    const reviewItem = document.createElement('div');
+                    reviewItem.className = 'question';
+                    
+                    reviewItem.innerHTML = `
+                        <div class="question-text">
+                            ${index + 1}. ${question.text}
+                            <span class="difficulty ${question.difficulty}">${question.difficulty}</span>
+                        </div>
+                        <div class="options">
+                            ${question.options.map((option, optIndex) => {
+                                let className = 'option';
+                                if (optIndex === question.correct) {
+                                    className += ' correct';
+                                } else if (optIndex === userAnswer && !isCorrect) {
+                                    className += ' incorrect';
+                                }
+                                
+                                return `
+                                    <div class="${className}">
+                                        <input type="radio" disabled ${optIndex === userAnswer ? 'checked' : ''}>
+                                        <label>${option}</label>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        <div class="explanation">
+                            <strong>Explanation:</strong> ${question.explanation}
+                        </div>
+                    `;
+                    
+                    answersReview.appendChild(reviewItem);
+                });
+                
+                answersReview.classList.remove('hidden');
+            }
+            
+            function retakeExam() {
+                // Reset and start the same exam again
+                startExam();
+            }
+            
+            function newExam() {
+                // Return to exam selection
+                examContent.classList.add('hidden');
+                resultsContainer.classList.add('hidden');
+                answersReview.classList.add('hidden');
+            }
+            
+            // Utility function to shuffle array
+            function shuffleArray(array) {
+                const newArray = [...array];
+                for (let i = newArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+                }
+                return newArray;
+            }
+            
+            // Initialize navigation buttons
+            updateNavigationButtons();
+        });
+    </script>
+</body>
+</html>
