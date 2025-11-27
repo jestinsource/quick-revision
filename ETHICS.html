@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethics & Sustainability Learning Platform</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent1: #1abc9c;
+            --accent2: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .sidebar {
+            flex: 0 0 250px;
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-right: 20px;
+        }
+        
+        .main-content {
+            flex: 1;
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .module-list {
+            list-style: none;
+        }
+        
+        .module-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        
+        .module-item:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .module-item.active {
+            background-color: #e1f0fa;
+            border-left: 4px solid var(--secondary);
+            font-weight: 600;
+        }
+        
+        h1 {
+            margin-bottom: 10px;
+            font-size: 2.2rem;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--accent1);
+        }
+        
+        h3 {
+            color: var(--secondary);
+            margin: 20px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        ul, ol {
+            margin-left: 20px;
+            margin-bottom: 20px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-left: 4px solid var(--accent1);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .highlight {
+            background-color: #fff9e6;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #ffcc00;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: var(--accent1);
+            width: 25%;
+            transition: width 0.5s ease;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #2980b9;
+        }
+        
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        
+        .key-term {
+            background-color: #e8f4fc;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 500;
+        }
+        
+        .quiz-container {
+            background-color: #f0f7ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .quiz-question {
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .quiz-options {
+            margin-left: 20px;
+        }
+        
+        .quiz-option {
+            margin-bottom: 8px;
+        }
+        
+        .completion-check {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        
+        .completion-check input {
+            margin-right: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                margin-right: 0;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Ethics & Sustainability Learning Platform</h1>
+        <p>Master 4 modules in one day with this interactive guide</p>
+    </header>
+    
+    <div class="container">
+        <div class="sidebar">
+            <h3>Course Modules</h3>
+            <ul class="module-list">
+                <li class="module-item active" data-module="1">Module 1: Ethics Fundamentals & Gender Studies</li>
+                <li class="module-item" data-module="2">Module 2: Environmental Ethics & Sustainability</li>
+                <li class="module-item" data-module="3">Module 3: Resource Management & Circular Economy</li>
+                <li class="module-item" data-module="4">Module 4: Energy, Climate & Policy</li>
+            </ul>
+            
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <p>Progress: <span id="progress-text">25%</span></p>
+            
+            <div class="completion-check">
+                <input type="checkbox" id="module1-check">
+                <label for="module1-check">Mark Module 1 as Complete</label>
+            </div>
+            <div class="completion-check">
+                <input type="checkbox" id="module2-check">
+                <label for="module2-check">Mark Module 2 as Complete</label>
+            </div>
+            <div class="completion-check">
+                <input type="checkbox" id="module3-check">
+                <label for="module3-check">Mark Module 3 as Complete</label>
+            </div>
+            <div class="completion-check">
+                <input type="checkbox" id="module4-check">
+                <label for="module4-check">Mark Module 4 as Complete</label>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <div id="module-content">
+                <!-- Module 1 Content -->
+                <div id="module1" class="module active">
+                    <h2>Module 1: Ethics Fundamentals & Gender Studies</h2>
+                    
+                    <h3>Fundamentals of Ethics</h3>
+                    <p>Ethics refers to the moral principles that govern a person's behavior or the conducting of an activity. It's a system of moral principles that affects how people make decisions and lead their lives.</p>
+                    
+                    <div class="card">
+                        <h4>Personal vs. Professional Ethics</h4>
+                        <p><span class="key-term">Personal Ethics</span> refer to an individual's own moral guidelines that they use in their daily life.</p>
+                        <p><span class="key-term">Professional Ethics</span> are the moral principles that govern a person's behavior in a business or professional context.</p>
+                    </div>
+                    
+                    <h4>Civic Virtue</h4>
+                    <p>Civic virtue is the cultivation of habits important for the success of a society. It includes public-spiritedness, respect for law, and commitment to democratic principles.</p>
+                    
+                    <h4>Respect for Others</h4>
+                    <p>This involves recognizing the inherent worth and dignity of every person, regardless of their background, beliefs, or status.</p>
+                    
+                    <h4>Profession and Professionalism</h4>
+                    <p>A profession is a disciplined group of individuals who adhere to ethical standards. Professionalism encompasses the competence, skill, and conduct expected of a professional.</p>
+                    
+                    <h4>Integrity in Design, Development, and Research</h4>
+                    <p>This involves maintaining honesty and strong moral principles in all professional activities, especially when creating new technologies or conducting research.</p>
+                    
+                    <h4>Plagiarism</h4>
+                    <p>Plagiarism is presenting someone else's work or ideas as your own without proper acknowledgment. It's a serious ethical violation in academic and professional settings.</p>
+                    
+                    <div class="highlight">
+                        <h4>Technology and Digital Revolution</h4>
+                        <p><span class="key-term">Data</span>: Raw, unorganized facts</p>
+                        <p><span class="key-term">Information</span>: Processed data with context</p>
+                        <p><span class="key-term">Knowledge</span>: Information applied to solve problems</p>
+                        <p>Cybersecurity and cybertrust are essential in the digital age to protect data and maintain confidence in digital systems.</p>
+                    </div>
+                    
+                    <h3>Basic Concepts in Gender Studies</h3>
+                    
+                    <h4>Sex, Gender, and Sexuality</h4>
+                    <p><span class="key-term">Sex</span>: Biological characteristics that define humans as male or female</p>
+                    <p><span class="key-term">Gender</span>: Socially constructed roles, behaviors, and attributes</p>
+                    <p><span class="key-term">Sexuality</span>: A person's sexual orientation, preferences, and identity</p>
+                    
+                    <h4>Gender Spectrum: Beyond the Binary</h4>
+                    <p>The concept that gender exists on a spectrum rather than as a strict male/female binary, recognizing non-binary and genderfluid identities.</p>
+                    
+                    <h4>Gender Identity and Expression</h4>
+                    <p><span class="key-term">Gender Identity</span>: One's internal sense of their own gender</p>
+                    <p><span class="key-term">Gender Expression</span>: How one presents their gender through appearance and behavior</p>
+                    
+                    <h4>Gender Disparity and Discrimination</h4>
+                    <p>Unequal treatment or perceptions of individuals based on their gender, which can manifest in education, employment, and everyday life.</p>
+                    
+                    <h4>History of Women in Science & Technology</h4>
+                    <p>Despite significant contributions throughout history, women have often been underrepresented and their achievements overlooked in STEM fields.</p>
+                    
+                    <div class="quiz-container">
+                        <h4>Quick Knowledge Check</h4>
+                        <div class="quiz-question">1. What is the difference between personal and professional ethics?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option"><input type="radio" name="q1"> Personal ethics apply only at home</div>
+                            <div class="quiz-option"><input type="radio" name="q1"> Professional ethics are more important than personal ethics</div>
+                            <div class="quiz-option"><input type="radio" name="q1"> Personal ethics guide individual life, professional ethics guide work conduct</div>
+                        </div>
+                        
+                        <div class="quiz-question">2. What is the gender spectrum concept?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option"><input type="radio" name="q2"> The idea that gender is only male or female</div>
+                            <div class="quiz-option"><input type="radio" name="q2"> The concept that gender exists beyond the male/female binary</div>
+                            <div class="quiz-option"><input type="radio" name="q2"> A way to measure how masculine or feminine someone is</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Module 2 Content -->
+                <div id="module2" class="module">
+                    <h2>Module 2: Environmental Ethics & Sustainability</h2>
+                    
+                    <h3>Introduction to Environmental Ethics</h3>
+                    <p>Environmental ethics is the philosophical discipline that considers the moral relationship of human beings to the environment and its non-human contents.</p>
+                    
+                    <h4>Key Philosophical Theories</h4>
+                    <ul>
+                        <li><span class="key-term">Anthropocentrism</span>: Human-centered view that values nature primarily for its usefulness to humans</li>
+                        <li><span class="key-term">Biocentrism</span>: Extends inherent value to all living things</li>
+                        <li><span class="key-term">Ecocentrism</span>: Places value on ecosystems as a whole, including abiotic elements</li>
+                    </ul>
+                    
+                    <h3>Sustainable Engineering Principles</h3>
+                    <p>Sustainable engineering aims to design systems that use energy and resources sustainably, minimizing environmental impacts.</p>
+                    
+                    <h4>Triple Bottom Line</h4>
+                    <p>A framework that evaluates performance based on three pillars:</p>
+                    <ol>
+                        <li><span class="key-term">Economic sustainability</span>: Profit and economic viability</li>
+                        <li><span class="key-term">Social sustainability</span>: People and social equity</li>
+                        <li><span class="key-term">Environmental sustainability</span>: Planet and environmental protection</li>
+                    </ol>
+                    
+                    <h4>Life Cycle Analysis</h4>
+                    <p>A technique to assess environmental impacts associated with all stages of a product's life from raw material extraction through materials processing, manufacture, distribution, use, repair and maintenance, and disposal or recycling.</p>
+                    
+                    <h3>Ecosystems and Biodiversity</h3>
+                    <p>Ecosystems are communities of living organisms in conjunction with the nonliving components of their environment, interacting as a system.</p>
+                    
+                    <h4>Importance of Biodiversity</h4>
+                    <p>Biodiversity provides ecosystem services, genetic resources, and contributes to ecological stability and resilience.</p>
+                    
+                    <div class="card">
+                        <h4>Ecosystems in Kerala/India</h4>
+                        <p>Kerala features diverse ecosystems including Western Ghats forests, backwaters, and coastal regions. These ecosystems support high biodiversity but face threats from development and climate change.</p>
+                    </div>
+                    
+                    <h3>Landscape and Urban Ecology</h3>
+                    <p>Landscape ecology examines how spatial patterns affect ecological processes. Urban ecology studies ecosystems in urban environments.</p>
+                    
+                    <h4>Sustainable Urban Planning</h4>
+                    <p>Approaches include green infrastructure, mixed-use development, transit-oriented design, and preservation of natural areas within urban settings.</p>
+                </div>
+                
+                <!-- Module 3 Content -->
+                <div id="module3" class="module">
+                    <h2>Module 3: Resource Management & Circular Economy</h2>
+                    
+                    <h3>Hydrology and Water Management</h3>
+                    <p>Hydrology is the scientific study of the movement, distribution, and management of water on Earth and other planets.</p>
+                    
+                    <h4>Water Scarcity and Pollution</h4>
+                    <p>Global challenges include physical water scarcity, economic water scarcity, and contamination from industrial, agricultural, and domestic sources.</p>
+                    
+                    <h4>Sustainable Water Management Practices</h4>
+                    <ul>
+                        <li>Rainwater harvesting</li>
+                        <li>Wastewater treatment and reuse</li>
+                        <li>Efficient irrigation techniques</li>
+                        <li>Watershed management</li>
+                    </ul>
+                    
+                    <h3>Zero Waste Concepts and Practices</h3>
+                    <p>Zero waste is a set of principles focused on waste prevention that encourages the redesign of resource life cycles so that all products are reused.</p>
+                    
+                    <h4>Strategies for Waste Reduction</h4>
+                    <p>The 3 R's hierarchy: Reduce (most preferred), Reuse, Recycle (least preferred). Additional R's include Refuse, Rot (compost), and Repair.</p>
+                    
+                    <h3>Circular Economy and Degrowth</h3>
+                    <p>A circular economy aims to eliminate waste and the continual use of resources, contrasting with the traditional linear economy (make, use, dispose).</p>
+                    
+                    <h4>Degrowth Principles</h4>
+                    <p>Degrowth advocates for a downscaling of production and consumption that increases human well-being and enhances ecological conditions.</p>
+                    
+                    <h3>Mobility and Sustainable Transportation</h3>
+                    <p>Sustainable transportation meets current mobility needs without compromising the ability of future generations to meet their needs.</p>
+                    
+                    <h4>Sustainable Urban Mobility Solutions</h4>
+                    <ul>
+                        <li>Public transportation systems</li>
+                        <li>Non-motorized transport (walking, cycling)</li>
+                        <li>E-mobility (electric vehicles)</li>
+                        <li>Integrated mobility systems</li>
+                    </ul>
+                </div>
+                
+                <!-- Module 4 Content -->
+                <div id="module4" class="module">
+                    <h2>Module 4: Energy, Climate & Policy</h2>
+                    
+                    <h3>Renewable Energy and Sustainable Technologies</h3>
+                    <p>Renewable energy comes from natural sources that are replenished at a higher rate than they are consumed.</p>
+                    
+                    <h4>Major Renewable Energy Sources</h4>
+                    <ul>
+                        <li><span class="key-term">Solar</span>: Photovoltaic and solar thermal systems</li>
+                        <li><span class="key-term">Wind</span>: Onshore and offshore wind turbines</li>
+                        <li><span class="key-term">Hydro</span>: Large-scale and small-scale hydropower</li>
+                        <li><span class="key-term">Biomass</span>: Energy from organic materials</li>
+                    </ul>
+                    
+                    <h4>Challenges in Renewable Energy Adoption</h4>
+                    <p>Intermittency, storage limitations, infrastructure requirements, and initial costs are key challenges.</p>
+                    
+                    <h3>Climate Change and Engineering Solutions</h3>
+                    <p>Climate change refers to long-term shifts in temperatures and weather patterns, primarily caused by human activities, especially fossil fuel burning.</p>
+                    
+                    <h4>Impact on Kerala/India</h4>
+                    <p>India faces climate challenges including changing monsoon patterns, sea-level rise affecting coastal areas, and increased frequency of extreme weather events.</p>
+                    
+                    <h4>Engineering Solutions</h4>
+                    <p>Approaches include climate-resilient infrastructure, carbon capture technologies, renewable energy systems, and sustainable agricultural practices.</p>
+                    
+                    <h3>Environmental Policies and Regulations</h3>
+                    <p>Key policies include the Paris Agreement, UN Sustainable Development Goals, and national regulations like India's Environmental Protection Act.</p>
+                    
+                    <h4>Role of Engineers in Policy Implementation</h4>
+                    <p>Engineers translate policy requirements into practical solutions, ensure compliance through design and implementation, and provide technical expertise for policy development.</p>
+                    
+                    <div class="highlight">
+                        <h4>Case Studies and Future Directions</h4>
+                        <p>Analysis of real-world implementations of sustainable practices provides valuable lessons for future projects. Emerging trends include nature-based solutions, digitalization for sustainability, and circular business models.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="nav-buttons">
+                <button id="prev-btn" disabled>Previous Module</button>
+                <button id="next-btn">Next Module</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>Ethics & Sustainability Learning Platform &copy; 2023 | Designed for comprehensive one-day learning</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const moduleItems = document.querySelectorAll('.module-item');
+            const modules = document.querySelectorAll('.module');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const progressBar = document.getElementById('progress');
+            const progressText = document.getElementById('progress-text');
+            const checkboxes = document.querySelectorAll('.completion-check input');
+            
+            let currentModule = 1;
+            
+            // Module navigation
+            moduleItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const moduleId = this.getAttribute('data-module');
+                    showModule(moduleId);
+                });
+            });
+            
+            // Previous button
+            prevBtn.addEventListener('click', function() {
+                if (currentModule > 1) {
+                    showModule(currentModule - 1);
+                }
+            });
+            
+            // Next button
+            nextBtn.addEventListener('click', function() {
+                if (currentModule < 4) {
+                    showModule(currentModule + 1);
+                }
+            });
+            
+            // Update progress based on checkboxes
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateProgress);
+            });
+            
+            function showModule(moduleId) {
+                // Hide all modules
+                modules.forEach(module => {
+                    module.classList.remove('active');
+                });
+                
+                // Show selected module
+                document.getElementById(`module${moduleId}`).classList.add('active');
+                
+                // Update active module in sidebar
+                moduleItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.getAttribute('data-module') === moduleId.toString()) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Update current module
+                currentModule = parseInt(moduleId);
+                
+                // Update navigation buttons
+                prevBtn.disabled = currentModule === 1;
+                nextBtn.disabled = currentModule === 4;
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+            }
+            
+            function updateProgress() {
+                let completed = 0;
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) completed++;
+                });
+                
+                const progressPercentage = (completed / 4) * 100;
+                progressBar.style.width = `${progressPercentage}%`;
+                progressText.textContent = `${progressPercentage}%`;
+            }
+            
+            // Initialize
+            updateProgress();
+        });
+    </script>
+</body>
+</html>
